@@ -77,11 +77,12 @@ def add_greenhouse_info(greenhouseId:int):
         print(e)
         return {"error": "some error happened"}, 501
 
-@app.route("/greenhouses/<int:greenhouseId>/time", methods=["GET"])
+@app.route("/greenhouses/<int:greenhouseId>/sensorType", methods=["GET"])
 def get_greenhouse_info_by_time(greenhouseId):
 
     start = request.args.get("start")
     end = request.args.get("end")
+    sensorType = request.args.get("type")
 
     try:
         end = dt.datetime.strptime(end, "%Y-%m-%dT%H:%M:%S")
@@ -89,12 +90,19 @@ def get_greenhouse_info_by_time(greenhouseId):
     except Exception as e:
         return {"error": "timestamp not following format %Y-%m-%dT%H:%M:%S"}, 400
 
-
-    docs = list(db.instanceData.aggregate([
-                {"$match" : {"time": {"$gt" : start, "$lt": end}}},
-                {"$project":
-                     {"greenhouseId": greenhouseId, "humidity": "$humidity", "temp": "$temp", "lumens":"$lumens"}
-                 }
+    if len(sensorType) == 0:
+        docs = list(db.instanceData.aggregate([
+                    {"$match" : {"time": {"$gt" : start, "$lt": end}}},
+                    {"$project":
+                         {"greenhouseId": greenhouseId, "humidity": "$humidity", "temp": "$temp", "lumens":"$lumens"}
+                    }
+            ]))
+    else:
+        docs = list(db.instanceData.aggregate([
+            {"$match": {"time": {"$gt": start, "$lt": end}}},
+            {"$project":
+                 {"greenhouseId": greenhouseId, f"{sensorType}":f"${sensorType}"}
+             }
         ]))
 
     for doc in docs:
