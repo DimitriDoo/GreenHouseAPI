@@ -79,8 +79,19 @@ def add_greenhouse_info(greenhouseId:int):
 
 @app.route("/greenhouses/<int:greenhouseId>/time", methods=["GET"])
 def get_greenhouse_info_by_time(greenhouseId):
+
+    start = request.args.get("start")
+    end = request.args.get("end")
+
+    try:
+        end = dt.datetime.strptime(end, "%Y-%m-%dT%H:%M:%S")
+        start = dt.datetime.strptime(start, "%Y-%m-%dT%H:%M:%S")
+    except Exception as e:
+        return {"error": "timestamp not following format %Y-%m-%dT%H:%M:%S"}, 400
+
+
     docs = list(db.instanceData.aggregate([
-                {"$match" : {"time": {"$gt" : dt.datetime.strptime("2022-11-28T11:58:04", "%Y-%m-%dT%H:%M:%S")}}},
+                {"$match" : {"time": {"$gt" : start}}},
                 {"$project":
                      {"greenhouseId": greenhouseId, "humidity": "$humidity", "temp": "$temp", "lumens":"$lumens"}
                  }
