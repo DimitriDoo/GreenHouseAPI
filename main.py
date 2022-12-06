@@ -91,7 +91,7 @@ def get_greenhouse_info_by_time(greenhouseId):
 
 
     docs = list(db.instanceData.aggregate([
-                {"$match" : {"time": {"$gt" : start}}},
+                {"$match" : {"time": {"$gt" : start, "$lt": end}}},
                 {"$project":
                      {"greenhouseId": greenhouseId, "humidity": "$humidity", "temp": "$temp", "lumens":"$lumens"}
                  }
