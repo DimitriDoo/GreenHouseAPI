@@ -6,9 +6,11 @@ The GreenHouse API helps users see and manage their greenhouse information.
 
 `inline code` hello
 
-### Info Request
+### Example of a valid Json request
 ```json
 {
-  "example": "request"
+    "humidity": 27.3,
+    "temp":26,
+    "lumens":200
 }
 ```
