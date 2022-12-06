@@ -77,6 +77,22 @@ def add_greenhouse_info(greenhouseId:int):
         print(e)
         return {"error": "some error happened"}, 501
 
+@app.route("/greenhouses/<int:greenhouseId>/time", methods=["GET"])
+def get_greenhouse_info_by_time(greenhouseId):
+    docs = list(db.instanceData.aggregate([
+                {"$match" : {"time": {"$gt" : dt.datetime.strptime("2022-11-28T11:58:04", "%Y-%m-%dT%H:%M:%S")}}},
+                {"$project":
+                     {"greenhouseId": greenhouseId, "humidity": "$humidity", "temp": "$temp", "lumens":"$lumens"}
+                 }
+        ]))
+
+    for doc in docs:
+        if "_id" in doc:
+            doc["_id"] = str(doc["_id"])
+
+    return docs
+
+
 
 if __name__ == "__main__":
     app.run()
