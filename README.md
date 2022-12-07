@@ -99,6 +99,25 @@ a greenhouse
 #### Request URL: http://127.0.0.1:5000/greenhouses/124?start=2021-11-28T11:58:30&end=2025-11-28T11:58:04&type=lumens
 #### Output:
 
+```json
+[
+  {
+    "_id": "6384e89c95b5acf59b9989a6",
+    "greenhouseId": 124,
+    "lumens": 0.75
+  },
+  {
+    "_id": "6384e8b695b5acf59b9989a7",
+    "greenhouseId": 124,
+    "lumens": 0.75
+  },
+  {
+    "_id": "638eb0c5efdd20372994c8e5",
+    "greenhouseId": 124,
+    "lumens": 200
+  }
+]
+```
 
 
 
