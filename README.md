@@ -61,6 +61,37 @@ A basic GET request will return an array of all the documents with the specified
   }
 ]
 ```
+### Get Request with time interval
+This request bellow uses URL parameters in order to search in between a set time interval.
+
+
+#### Request URL: http://127.0.0.1:5000/greenhouses/124?start=2021-11-28T11:58:30&end=2025-11-28T11:58:04
+#### Output:
+```json
+[
+  {
+    "_id": "6384e89c95b5acf59b9989a6",
+    "greenhouseId": 124,
+    "humidity": 23.5,
+    "lumens": 0.75,
+    "temp": 20.0
+  },
+  {
+    "_id": "6384e8b695b5acf59b9989a7",
+    "greenhouseId": 124,
+    "humidity": 23.5,
+    "lumens": 0.75,
+    "temp": 20.0
+  },
+  {
+    "_id": "638eb0c5efdd20372994c8e5",
+    "greenhouseId": 124,
+    "humidity": 27.3,
+    "lumens": 200,
+    "temp": 26
+  }
+]
+```
 
 
 ### Example of a valid Json request POST request:
