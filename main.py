@@ -66,12 +66,10 @@ def add_greenhouse_info(greenhouseId:int):
 @app.route("/greenhouses/<int:greenhouseId>", methods=["GET"])
 def get_greenhouse_info(greenhouseId):
 
-    print(greenhouseId)
-
     sensorType = ""
     start = ""
     end = ""
-    doc = {"error":"doc empty"}
+    doc = ""
 
     if request.args.get("type") is not None:
         sensorType = request.args.get("type")
@@ -96,16 +94,17 @@ def get_greenhouse_info(greenhouseId):
                 {"$match": {"time": {"$gt": start, "$lt": end}}},
                 {"$project":
                      {"greenhouseId": greenhouseId, f"{sensorType}": f"${sensorType}"}
-                }
+                 }
             ]))
         else:
             docs = list(db.instanceData.aggregate([
-                {"$match": {"time": {"$gt": start, "$lt": end}, "greenhouseId" : greenhouseId}},
+                {"$match": {"time": {"$gt": start, "$lt": end}, "greenhouseId": greenhouseId}},
                 {"$project":
                      {"greenhouseId": greenhouseId, "humidity": "$humidity", "temp": "$temp", "lumens": "$lumens"}
-                }
+                 }
             ]))
             print(docs)
+
     else:
         try:
 
