@@ -92,6 +92,14 @@ This request bellow uses URL parameters in order to search in between a set time
   }
 ]
 ```
+### Get request of Specific sensor info with time interval:
+The URL bellow is used in order to search for just a specifc Sensor information in a set time frame of
+a greenhouse
+
+#### Request URL: http://127.0.0.1:5000/greenhouses/124?start=2021-11-28T11:58:30&end=2025-11-28T11:58:04&type=lumens
+#### Output:
+
+
 
 
 ### Example of a valid Json request POST request:
