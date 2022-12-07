@@ -125,7 +125,7 @@ def get_greenhouse_info(greenhouseId):
         if "_id" in doc:
             doc["_id"] = str(doc["_id"])
 
-    return jsonify(doc)
+    return jsonify(docs)
 
 
 
