@@ -39,20 +39,6 @@ if 'instanceData' not in db.list_collection_names():
 def index():
     return "hi <br> you should try http://127.0.0.1:5000/greenhouses/{greenhouseId} instead"
 
-@app.route("/greenhouses/<int:greenhouseId>", methods=["GET"])
-def get_all_greenhouse_info(greenhouseId):
-    try:
-        cursor = db.instanceData.find({"greenhouseId": greenhouseId})
-        instances = list(cursor)
-        for instance in instances:
-            if "_id" in instance:
-                instance["_id"] = str(instance["_id"])
-
-        return jsonify(instances)
-
-    except Exception as e:
-        print(e)
-        return {"error" : "some error happened"}, 501
 
 @app.route("/greenhouses/<int:greenhouseId>", methods=["POST"])
 def add_greenhouse_info(greenhouseId:int):
@@ -77,39 +63,66 @@ def add_greenhouse_info(greenhouseId:int):
         print(e)
         return {"error": "some error happened"}, 501
 
-@app.route("/greenhouses/<int:greenhouseId>/sensorType", methods=["GET"])
-def get_greenhouse_info_by_time(greenhouseId):
+@app.route("/greenhouses/<int:greenhouseId>", methods=["GET"])
+def get_greenhouse_info(greenhouseId):
 
-    start = request.args.get("start")
-    end = request.args.get("end")
-    sensorType = request.args.get("type")
+    sensorType = ""
+    start = ""
+    end = ""
+    doc = ""
 
-    try:
-        end = dt.datetime.strptime(end, "%Y-%m-%dT%H:%M:%S")
-        start = dt.datetime.strptime(start, "%Y-%m-%dT%H:%M:%S")
-    except Exception as e:
-        return {"error": "timestamp not following format %Y-%m-%dT%H:%M:%S"}, 400
+    if request.args.get("type") is not None:
+        sensorType = request.args.get("type")
 
-    if len(sensorType) == 0:
-        docs = list(db.instanceData.aggregate([
-                    {"$match" : {"time": {"$gt" : start, "$lt": end}}},
-                    {"$project":
-                         {"greenhouseId": greenhouseId, "humidity": "$humidity", "temp": "$temp", "lumens":"$lumens"}
-                    }
+    if request.args.get("start") is not None:
+        start = request.args.get("start")
+        try:
+            start = dt.datetime.strptime(start, "%Y-%m-%dT%H:%M:%S")
+        except Exception as e:
+            return {"error": "timestamp not following format %Y-%m-%dT%H:%M:%S"}, 400
+
+    if request.args.get("end") is not None:
+        end = request.args.get("end")
+        try:
+            end = dt.datetime.strptime(end, "%Y-%m-%dT%H:%M:%S")
+        except Exception as e:
+            return {"error": "timestamp not following format %Y-%m-%dT%H:%M:%S"}, 400
+
+    if start != "" and end != "":
+        if len(sensorType) != 0:
+            docs = list(db.instanceData.aggregate([
+                {"$match": {"time": {"$gt": start, "$lt": end}}},
+                {"$project":
+                     {"greenhouseId": greenhouseId, f"{sensorType}": f"${sensorType}"}
+                 }
+            ]))
+        else:
+            docs = list(db.instanceData.aggregate([
+                {"$match": {"time": {"$gt": start, "$lt": end}}},
+                {"$project":
+                     {"greenhouseId": greenhouseId, "humidity": "$humidity", "temp": "$temp", "lumens": "$lumens"}
+                 }
             ]))
     else:
-        docs = list(db.instanceData.aggregate([
-            {"$match": {"time": {"$gt": start, "$lt": end}}},
-            {"$project":
-                 {"greenhouseId": greenhouseId, f"{sensorType}":f"${sensorType}"}
-             }
-        ]))
+        try:
+
+            instances = list(db.instanceData.find({"greenhouseId": greenhouseId}))
+            for instance in instances:
+                if "_id" in instance:
+                    instance["_id"] = str(instance["_id"])
+
+            return instances
+
+        except Exception as e:
+            print(e)
+            return {"error": "some error happened"}, 501
+
 
     for doc in docs:
         if "_id" in doc:
             doc["_id"] = str(doc["_id"])
 
-    return docs
+    return jsonify(doc)
 
 
 
