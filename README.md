@@ -119,13 +119,36 @@ a greenhouse
 ]
 ```
 
+## POST:
+
+All that is needed to post is a valid request body as well as a valid 
+URL
+
+#### POST URL example: http://127.0.0.1:5000/greenhouses/132
+
+The greenhouseId is added from the url and not from the requestBody.
+In the example above the URL uses the greenhouseId "132"
 
 
-### Example of a valid Json request POST request:
+
+
+### Example of a valid Json request POST request body:
 ```json
 {
     "humidity": 27.3,
     "temp":26,
     "lumens":200
+}
+```
+
+### Valid POST output:
+```json
+{
+    "_id": "63901d74e3889edeb7e2416b",
+    "greenhouseId": 124,
+    "humidity": 27.3,
+    "lumens": 200,
+    "temp": 26,
+    "time": "Tue, 06 Dec 2022 23:58:28 GMT"
 }
 ```
