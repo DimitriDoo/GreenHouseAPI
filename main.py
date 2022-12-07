@@ -93,7 +93,8 @@ def get_greenhouse_info(greenhouseId):
             docs = list(db.instanceData.aggregate([
                 {"$match": {"time": {"$gt": start, "$lt": end}}},
                 {"$project":
-                     {"greenhouseId": greenhouseId, f"{sensorType}": f"${sensorType}"}
+                     {"greenhouseId": greenhouseId, f"{sensorType}": f"${sensorType}"}},
+                 {"$sort": {sensorType}
                  }
             ]))
         else:
@@ -127,7 +128,7 @@ def get_greenhouse_info(greenhouseId):
 #i love merge issues
     return jsonify(docs)
 
-
+#hello hi
 
 if __name__ == "__main__":
     app.run()
