@@ -144,11 +144,11 @@ In the example above the URL uses the greenhouseId "132"
 ### Valid POST output:
 ```json
 {
-    "_id": "63901d74e3889edeb7e2416b",
-    "greenhouseId": 124,
-    "humidity": 27.3,
+    "_id": "63a5186022f4fc22fdd37ff3",
+    "greenhouseId": 132,
+    "humidity": 26,
     "lumens": 200,
-    "temp": 26,
-    "time": "Tue, 06 Dec 2022 23:58:28 GMT"
+    "temp": "32C",
+    "time": "Thu, 22 Dec 2022 21:54:24 GMT"
 }
 ```

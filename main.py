@@ -49,7 +49,6 @@ def add_greenhouse_info(greenhouseId:int):
     if error:
         return error, 400
 
-
     instance["time"] = dt.datetime.today().replace(microsecond=0)
     print(instance["time"])
 
