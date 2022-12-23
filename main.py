@@ -54,6 +54,11 @@ def add_greenhouse_info(greenhouseId:int):
     print(instance["time"])
 
 
+    instance["temp"] = str(instance["temp"]) + "C"
+
+
+
+
 
     try:
         inserted_id = db.instanceData.insert_one(instance).inserted_id
@@ -95,6 +100,7 @@ def get_greenhouse_info(greenhouseId):
                 {"$project":
                      {"greenhouseId": greenhouseId, f"{sensorType}": f"${sensorType}"}
                  }
+                #group by sensor id
             ]))
         else:
             docs = list(db.instanceData.aggregate([
